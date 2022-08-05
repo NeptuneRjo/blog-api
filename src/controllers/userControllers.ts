@@ -1,6 +1,18 @@
 import { Request, Response } from 'express'
 import { User } from '../models/models-exports'
 
+// GET Requests
+export const get_user = async (req: Request, res: Response): Promise<void> => {
+	const { id } = req.params
+
+	try {
+		const user = await User.findOne({ _id: id })
+		res.status(200).json({ user: { email: user?.email } })
+	} catch (error) {
+		res.status(404).json({ error })
+	}
+}
+
 // POST Requests
 export const post_user = async (req: Request, res: Response): Promise<void> => {
 	try {
