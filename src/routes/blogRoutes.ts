@@ -1,16 +1,15 @@
 import { Router } from 'express'
+import {
+	get_all_blogs,
+	get_blog,
+	post_blog,
+	delete_blog,
+	patch_blog,
+} from '../controllers/blogControllers'
 
 const router = Router()
 
-router
-	.route('/')
-	.get((req, res) => res.json({ msg: 'get blogs' }))
-	.post((req, res) => res.json({ msg: 'post blog' }))
-
-router
-	.route('/:id')
-	.get((req, res) => res.json({ msg: `get ${req.params.id}` }))
-	.patch((req, res) => res.json({ msg: `patch ${req.params.id}` }))
-	.delete((req, res) => res.json({ msg: `delete ${req.params.id}` }))
+router.route('/').get(get_all_blogs).post(post_blog)
+router.route('/:id').get(get_blog).patch(patch_blog).delete(delete_blog)
 
 export default router
