@@ -7,7 +7,12 @@ export const get_user = async (req: Request, res: Response): Promise<void> => {
 
 	try {
 		const user = await User.findOne({ _id: id })
-		res.status(200).json({ user: { email: user?.email } })
+
+		if (!user) {
+			res.status(404).json({ error: 'No user found with this id.' })
+		} else {
+			res.status(200).json({ user: { email: user?.email } })
+		}
 	} catch (error) {
 		res.status(404).json({ error })
 	}
@@ -32,7 +37,12 @@ export const delete_user = async (
 
 	try {
 		const user = await User.findOneAndDelete({ _id: id })
-		res.status(200).json(user)
+
+		if (!user) {
+			res.status(404).json({ error: 'No user found with this id.' })
+		} else {
+			res.status(200).json(user)
+		}
 	} catch (error) {
 		res.status(404).json({ error })
 	}
