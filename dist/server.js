@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const mongoose_1 = __importDefault(require("mongoose"));
+const mongoose_1 = require("mongoose");
 require("dotenv/config");
 const routes_exports_1 = require("./routes/routes-exports");
 const app = (0, express_1.default)();
@@ -17,7 +17,6 @@ app.use('/api/users', routes_exports_1.userRoutes);
 app.use('/api/blogs', routes_exports_1.blogRoutes);
 // <-- DB & App start -->
 const port = process.env.PORT || 3000;
-mongoose_1.default
-    .connect(`${process.env.MONGO_URI}`)
+(0, mongoose_1.connect)(`${process.env.MONGO_URI}`)
     .then(() => app.listen(port, () => console.log('Connected to DB and listening on port:', port)))
     .catch((err) => console.log(err));
