@@ -1,9 +1,8 @@
 import { Router } from 'express'
+import { post_user, delete_user } from '../controllers/userControllers'
 const router = Router()
 
-router.route('/').post((req, res) => res.json({ msg: 'post user' }))
-router
-	.route('/:id')
-	.delete((req, res) => res.json({ msg: `delete ${req.params.id}` }))
+router.route('/').post(post_user)
+router.route('/:id').delete(delete_user)
 
 export default router
