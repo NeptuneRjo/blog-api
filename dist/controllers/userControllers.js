@@ -9,8 +9,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.delete_user = exports.post_user = void 0;
+exports.delete_user = exports.post_user = exports.get_user = void 0;
 const models_exports_1 = require("../models/models-exports");
+// GET Requests
+const get_user = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    try {
+        const user = yield models_exports_1.User.findOne({ _id: id });
+        res.status(200).json({ user: { email: user === null || user === void 0 ? void 0 : user.email } });
+    }
+    catch (error) {
+        res.status(404).json({ error });
+    }
+});
+exports.get_user = get_user;
 // POST Requests
 const post_user = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {

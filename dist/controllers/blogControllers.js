@@ -51,9 +51,9 @@ const post_blog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.post_blog = post_blog;
 // PATCH Requests
 const patch_blog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.body;
+    const { id } = req.params;
     if (!mongoose_1.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({ error: 'No workout found' });
+        return res.status(404).json({ error: 'No blog found' });
     }
     try {
         const blog = yield models_exports_1.Blog.findOneAndUpdate({ _id: id }, req.body);
@@ -66,7 +66,7 @@ const patch_blog = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 exports.patch_blog = patch_blog;
 // DELETE Requests
 const delete_blog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.body;
+    const { id } = req.params;
     if (!mongoose_1.Types.ObjectId.isValid(id)) {
         return res.status(404).json({ error: 'No workout found' });
     }
