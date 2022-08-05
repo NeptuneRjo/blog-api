@@ -53,10 +53,10 @@ export const patch_blog = async (
 	req: Request,
 	res: Response
 ): Promise<void | Response> => {
-	const { id } = req.body
+	const { id } = req.params
 
 	if (!Types.ObjectId.isValid(id)) {
-		return res.status(404).json({ error: 'No workout found' })
+		return res.status(404).json({ error: 'No blog found' })
 	}
 
 	try {
@@ -73,7 +73,7 @@ export const delete_blog = async (
 	req: Request,
 	res: Response
 ): Promise<void | Response> => {
-	const { id } = req.body
+	const { id } = req.params
 
 	if (!Types.ObjectId.isValid(id)) {
 		return res.status(404).json({ error: 'No workout found' })
