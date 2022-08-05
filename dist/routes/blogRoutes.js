@@ -1,14 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
+const blogControllers_1 = require("../controllers/blogControllers");
 const router = (0, express_1.Router)();
-router
-    .route('/')
-    .get((req, res) => res.json({ msg: 'get blogs' }))
-    .post((req, res) => res.json({ msg: 'post blog' }));
-router
-    .route('/:id')
-    .get((req, res) => res.json({ msg: `get ${req.params.id}` }))
-    .patch((req, res) => res.json({ msg: `patch ${req.params.id}` }))
-    .delete((req, res) => res.json({ msg: `delete ${req.params.id}` }));
+router.route('/').get(blogControllers_1.get_all_blogs).post(blogControllers_1.post_blog);
+router.route('/:id').get(blogControllers_1.get_blog).patch(blogControllers_1.patch_blog).delete(blogControllers_1.delete_blog);
 exports.default = router;
