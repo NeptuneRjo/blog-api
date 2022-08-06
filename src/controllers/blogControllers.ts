@@ -28,6 +28,13 @@ export const get_blog = async (
 
 	try {
 		const blog = await Blog.findById(req.params.id)
+
+		if (!blog) {
+			res.status(404).json({ error: 'No blog found with this id.' })
+		} else {
+			res.status(200).json(blog)
+		}
+
 		res.status(200).json(blog)
 	} catch (error) {
 		res.status(404).json({ error })
@@ -76,11 +83,18 @@ export const delete_blog = async (
 	const { id } = req.params
 
 	if (!Types.ObjectId.isValid(id)) {
-		return res.status(404).json({ error: 'No workout found' })
+		return res.status(404).json({ error: 'No blog found' })
 	}
 
 	try {
 		const blog = await Blog.findOneAndDelete({ _id: id })
+
+		if (!blog) {
+			res.status(404).json({ error: 'No blog found with this id.' })
+		} else {
+			res.status(200).json(blog)
+		}
+
 		res.status(200).json(blog)
 	} catch (error) {
 		res.status(404).json({ error })
