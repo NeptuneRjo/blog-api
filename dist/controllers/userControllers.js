@@ -16,7 +16,12 @@ const get_user = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     try {
         const user = yield models_exports_1.User.findOne({ _id: id });
-        res.status(200).json({ user: { email: user === null || user === void 0 ? void 0 : user.email } });
+        if (!user) {
+            res.status(404).json({ error: 'No user found with this id.' });
+        }
+        else {
+            res.status(200).json({ user: { email: user === null || user === void 0 ? void 0 : user.email } });
+        }
     }
     catch (error) {
         res.status(404).json({ error });
@@ -39,7 +44,12 @@ const delete_user = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const { id } = req.params;
     try {
         const user = yield models_exports_1.User.findOneAndDelete({ _id: id });
-        res.status(200).json(user);
+        if (!user) {
+            res.status(404).json({ error: 'No user found with this id.' });
+        }
+        else {
+            res.status(200).json(user);
+        }
     }
     catch (error) {
         res.status(404).json({ error });
