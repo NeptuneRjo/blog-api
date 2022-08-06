@@ -12,7 +12,7 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 // <-- Routes -->
-app.get('/', (req, res) => res.json({ msg: 'Hello World' }));
+app.get('/', (req, res) => res.redirect('/api/users'));
 app.use('/api/users', routes_exports_1.userRoutes);
 app.use('/api/blogs', routes_exports_1.blogRoutes);
 // <-- DB & App start -->

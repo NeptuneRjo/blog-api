@@ -11,7 +11,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
 // <-- Routes -->
-app.get('/', (req, res) => res.json({ msg: 'Hello World' }))
+app.get('/', (req, res) => res.redirect('/api/users'))
 app.use('/api/users', userRoutes)
 app.use('/api/blogs', blogRoutes)
 
