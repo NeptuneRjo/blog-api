@@ -16,6 +16,10 @@ const blogModel = new Schema({
 		type: Date,
 		default: Date.now(),
 	},
+	comments: {
+		type: Array,
+		default: [],
+	},
 })
 
 const Blog = model('Blog', blogModel)
