@@ -1,5 +1,7 @@
 import express from 'express'
 import { connect } from 'mongoose'
+import { passportLocal } from './middleware/middleware-exports'
+import passport from 'passport'
 import 'dotenv/config'
 
 import { blogRoutes, userRoutes } from './routes/routes-exports'
@@ -9,6 +11,9 @@ const app = express()
 // <-- Middleware -->
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+
+// passport
+passport.use(passportLocal)
 
 // <-- Routes -->
 app.get('/', (req, res) => res.redirect('/api/users'))
