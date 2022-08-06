@@ -17,6 +17,10 @@ const blogModel = new mongoose_1.Schema({
         type: Date,
         default: Date.now(),
     },
+    comments: {
+        type: Array,
+        default: [],
+    },
 });
 const Blog = (0, mongoose_1.model)('Blog', blogModel);
 exports.default = Blog;
