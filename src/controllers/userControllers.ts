@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import passport from 'passport'
 import { User } from '../models/models-exports'
 
 // GET Requests
@@ -19,13 +20,24 @@ export const get_user = async (req: Request, res: Response): Promise<void> => {
 }
 
 // POST Requests
-export const post_user = async (req: Request, res: Response): Promise<void> => {
+export const signup_user = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
 	try {
 		const user = await User.create(req.body)
 		res.status(200).json({ message: 'User successfully created' })
 	} catch (error) {
 		res.status(400).json({ error })
 	}
+}
+
+export const login_user = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
+	passport.authenticate('local')
+	res.status(201).json({ user: req?.user })
 }
 
 // DELETE Requests
