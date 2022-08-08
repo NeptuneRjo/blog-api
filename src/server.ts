@@ -2,17 +2,19 @@ import express from 'express'
 import session from 'express-session'
 import { connect } from 'mongoose'
 import { passportLocal } from './middleware/middleware-exports'
-import { User } from './models/models-exports'
 import passport from 'passport'
 import 'dotenv/config'
 
 import { blogRoutes, userRoutes } from './routes/routes-exports'
 
 const app = express()
+passportLocal() // Passport strategy and serialization
 
 // <-- Middleware -->
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use(
 	session({
@@ -21,19 +23,6 @@ app.use(
 		saveUninitialized: true,
 	})
 )
-
-// passport
-app.use(passport.initialize())
-app.use(passport.session())
-passport.use(passportLocal)
-
-passport.serializeUser((id, done) => done(null, id))
-
-passport.deserializeUser((id, done) => {
-	User.findById(id, (err: any, user: any) => {
-		done(err, user)
-	})
-})
 
 // <-- Routes -->
 app.get('/', (req, res) => res.redirect('/api/users'))
