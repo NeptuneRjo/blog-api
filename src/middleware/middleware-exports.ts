@@ -1,1 +1,1 @@
-export { default as passportLocal } from './passportMiddleware'
+export { passportLocal } from './passportMiddleware'
