@@ -5,11 +5,14 @@ import {
 	delete_user,
 	get_user,
 	login_user,
+	logout_user,
 } from '../controllers/userControllers'
 const router = Router()
 
-router.route('/signup').post(signup_user)
-router.route('/login').post(passport.authenticate('local'), login_user)
+router.post('/signup', signup_user)
+router.post('/login', passport.authenticate('local'), login_user)
+router.post('/logout', logout_user)
+
 router.route('/:id').get(get_user).delete(delete_user)
 
 export default router
