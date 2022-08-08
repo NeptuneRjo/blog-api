@@ -1,6 +1,9 @@
 import express from 'express'
+import session from 'express-session'
 import { connect } from 'mongoose'
 import { passportLocal } from './middleware/middleware-exports'
+import bodyParser from 'body-parser'
+import { User } from './models/models-exports'
 import passport from 'passport'
 import 'dotenv/config'
 
@@ -12,8 +15,27 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
+app.use(
+	session({
+		secret: process.env.WEB_SECRET as string,
+		resave: false,
+		saveUninitialized: true,
+	})
+)
+// app.use(bodyParser.json())
+
 // passport
+app.use(passport.initialize())
+app.use(passport.session())
 passport.use(passportLocal)
+
+passport.serializeUser((id, done) => done(null, id))
+
+passport.deserializeUser((id, done) => {
+	User.findById(id, (err: any, user: any) => {
+		done(err, user)
+	})
+})
 
 // <-- Routes -->
 app.get('/', (req, res) => res.redirect('/api/users'))
