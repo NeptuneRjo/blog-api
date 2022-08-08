@@ -15,13 +15,13 @@ const app = (0, express_1.default)();
 // <-- Middleware -->
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
-app.use(passport_1.default.initialize());
-app.use(passport_1.default.session());
 app.use((0, express_session_1.default)({
     secret: process.env.WEB_SECRET,
     resave: false,
     saveUninitialized: true,
 }));
+app.use(passport_1.default.initialize());
+app.use(passport_1.default.session());
 // <-- Routes -->
 app.get('/', (req, res) => res.redirect('/api/users'));
 app.use('/api/users', routes_exports_1.userRoutes);

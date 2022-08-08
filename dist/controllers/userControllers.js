@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.delete_user = exports.post_user = exports.get_user = void 0;
+exports.delete_user = exports.logout_user = exports.login_user = exports.signup_user = exports.get_user = void 0;
 const models_exports_1 = require("../models/models-exports");
 // GET Requests
 const get_user = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -29,7 +29,7 @@ const get_user = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.get_user = get_user;
 // POST Requests
-const post_user = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const signup_user = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield models_exports_1.User.create(req.body);
         res.status(200).json({ message: 'User successfully created' });
@@ -38,7 +38,28 @@ const post_user = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.status(400).json({ error });
     }
 });
-exports.post_user = post_user;
+exports.signup_user = signup_user;
+const login_user = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let user = req.user;
+    if (req.user) {
+        res.status(200).json({
+            msg: 'User authenticated',
+            user: { email: user.email, id: user._id },
+        });
+    }
+    else {
+        res.status(400).json({ msg: 'Unable to authenticate user' });
+    }
+});
+exports.login_user = login_user;
+const logout_user = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    req.logout((err) => {
+        if (err)
+            return next(err);
+        res.status(200).json({ msg: 'User logged out', user: req.user });
+    });
+});
+exports.logout_user = logout_user;
 // DELETE Requests
 const delete_user = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
