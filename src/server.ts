@@ -13,8 +13,6 @@ passportLocal() // Passport strategy and serialization
 // <-- Middleware -->
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-app.use(passport.initialize())
-app.use(passport.session())
 
 app.use(
 	session({
@@ -23,6 +21,9 @@ app.use(
 		saveUninitialized: true,
 	})
 )
+
+app.use(passport.initialize())
+app.use(passport.session())
 
 // <-- Routes -->
 app.get('/', (req, res) => res.redirect('/api/users'))
