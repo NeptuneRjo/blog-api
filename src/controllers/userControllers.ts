@@ -1,4 +1,4 @@
-import { Request, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { User } from '../models/models-exports'
 
 // GET Requests
@@ -45,6 +45,17 @@ export const login_user = async (
 	} else {
 		res.status(400).json({ msg: 'Unable to authenticate user' })
 	}
+}
+
+export const logout_user = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+): Promise<void | NextFunction> => {
+	req.logout((err) => {
+		if (err) return next(err)
+		res.status(200).json({ msg: 'User logged out', user: req.user })
+	})
 }
 
 // DELETE Requests
