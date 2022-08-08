@@ -2,7 +2,6 @@ import express from 'express'
 import session from 'express-session'
 import { connect } from 'mongoose'
 import { passportLocal } from './middleware/middleware-exports'
-import bodyParser from 'body-parser'
 import { User } from './models/models-exports'
 import passport from 'passport'
 import 'dotenv/config'
@@ -22,7 +21,6 @@ app.use(
 		saveUninitialized: true,
 	})
 )
-// app.use(bodyParser.json())
 
 // passport
 app.use(passport.initialize())
