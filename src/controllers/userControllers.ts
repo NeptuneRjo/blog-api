@@ -31,7 +31,7 @@ export const signup_user = async (
 	}
 }
 
-export const logout_user = async (
+export const login_user = async (
 	req: Request,
 	res: Response
 ): Promise<void> => {
