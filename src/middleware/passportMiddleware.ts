@@ -1,7 +1,6 @@
 import { Strategy as LocalStrategy } from 'passport-local'
 import { User } from '../models/models-exports'
 import { compare } from 'bcryptjs'
-import passport from 'passport'
 
 const message = 'Incorrect password'
 
