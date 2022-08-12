@@ -35,7 +35,7 @@ export const get_blog = async (
 			res.status(200).json(blog)
 		}
 
-		res.status(200).json(blog)
+		// res.status(200).json(blog)
 	} catch (error) {
 		res.status(404).json({ error })
 	}
@@ -68,10 +68,20 @@ export const patch_blog = async (
 
 	try {
 		const blog = await Blog.findOneAndUpdate({ _id: id }, req.body)
-		res.status(200).json(blog)
+		const updatedBlog = await Blog.findById(id)
+
+		res.status(200).json(updatedBlog)
 	} catch (error) {
 		res.status(404).json({ error })
 	}
+
+	// const blog = await Blog.findOneAndUpdate({ _id: id }, req.body)
+
+	// if (!blog) {
+	// 	return res.status(404).json({ error: 'No blog found' })
+	// }
+
+	// res.status(200).json(blog)
 }
 
 // DELETE Requests
@@ -82,9 +92,9 @@ export const delete_blog = async (
 ): Promise<void | Response> => {
 	const { id } = req.params
 
-	if (!Types.ObjectId.isValid(id)) {
-		return res.status(404).json({ error: 'No blog found' })
-	}
+	// if (!Types.ObjectId.isValid(id)) {
+	// 	return res.status(404).json({ error: 'No blog found' })
+	// }
 
 	try {
 		const blog = await Blog.findOneAndDelete({ _id: id })
@@ -95,7 +105,7 @@ export const delete_blog = async (
 			res.status(200).json(blog)
 		}
 
-		res.status(200).json(blog)
+		// res.status(200).json(blog)
 	} catch (error) {
 		res.status(404).json({ error })
 	}
