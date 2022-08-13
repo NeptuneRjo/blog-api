@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dist/server.js",
     "postinstall": "tsc",
     "watch-node": "nodemon ./dist/server.js",
-    "deploy": "git add . && git commit -m heroku && git push heroku main"
+    "deploy": "git add . && git commit -m heroku && git push heroku main",
+    "start": "serve -s build",
+    "heroku-postbuild": "npm run build"
   },
   "engines": {
     "node": "16.13.0"
@@ -33,7 +34,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.5.0",
     "passport": "^0.6.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "serve": "^14.0.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
