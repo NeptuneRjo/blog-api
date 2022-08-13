@@ -26,7 +26,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 // <-- Routes -->
-app.get('/', (req, res) => res.redirect('/api/users'))
+app.get('/', (req, res) => res.send('Hello World'))
 app.use('/api/users', userRoutes)
 app.use('/api/blogs', blogRoutes)
 

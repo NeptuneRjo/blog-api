@@ -23,7 +23,7 @@ app.use((0, express_session_1.default)({
 app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());
 // <-- Routes -->
-app.get('/', (req, res) => res.redirect('/api/users'));
+app.get('/', (req, res) => res.send('Hello World'));
 app.use('/api/users', routes_exports_1.userRoutes);
 app.use('/api/blogs', routes_exports_1.blogRoutes);
 // <-- DB & App start -->
