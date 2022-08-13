@@ -27,7 +27,7 @@ app.get('/', (req, res) => res.redirect('/api/users'));
 app.use('/api/users', routes_exports_1.userRoutes);
 app.use('/api/blogs', routes_exports_1.blogRoutes);
 // <-- DB & App start -->
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 (0, mongoose_1.connect)(`${process.env.MONGO_URI}`)
     .then(() => app.listen(port, () => console.log('Connected to DB and listening on port:', port)))
     .catch((err) => console.log(err));

@@ -36,7 +36,6 @@ const get_blog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         else {
             res.status(200).json(blog);
         }
-        res.status(200).json(blog);
     }
     catch (error) {
         res.status(404).json({ error });
@@ -63,7 +62,8 @@ const patch_blog = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     }
     try {
         const blog = yield models_exports_1.Blog.findOneAndUpdate({ _id: id }, req.body);
-        res.status(200).json(blog);
+        const updatedBlog = yield models_exports_1.Blog.findById(id);
+        res.status(200).json(updatedBlog);
     }
     catch (error) {
         res.status(404).json({ error });
@@ -84,7 +84,6 @@ const delete_blog = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         else {
             res.status(200).json(blog);
         }
-        res.status(200).json(blog);
     }
     catch (error) {
         res.status(404).json({ error });

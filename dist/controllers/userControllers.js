@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.delete_user = exports.logout_user = exports.login_user = exports.signup_user = exports.get_user = void 0;
+exports.delete_user = exports.logout_user = exports.login_user = exports.signup_user = exports.get_current_user = exports.get_user = void 0;
 const models_exports_1 = require("../models/models-exports");
 // GET Requests
 const get_user = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -28,6 +28,16 @@ const get_user = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.get_user = get_user;
+const get_current_user = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    let user = req.user;
+    if (req.user) {
+        res.json({ user: { email: user === null || user === void 0 ? void 0 : user.email, id: user === null || user === void 0 ? void 0 : user._id } });
+    }
+    else {
+        res.json({ user });
+    }
+});
+exports.get_current_user = get_current_user;
 // POST Requests
 const signup_user = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
