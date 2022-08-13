@@ -18,6 +18,19 @@ export const get_user = async (req: Request, res: Response): Promise<void> => {
 	}
 }
 
+export const get_current_user = async (
+	req: Request,
+	res: Response
+): Promise<void> => {
+	let user = req.user as any
+
+	if (req.user) {
+		res.json({ user: { email: user?.email, id: user?._id } })
+	} else {
+		res.json({ user })
+	}
+}
+
 // POST Requests
 export const signup_user = async (
 	req: Request,
