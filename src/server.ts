@@ -31,7 +31,7 @@ app.use('/api/users', userRoutes)
 app.use('/api/blogs', blogRoutes)
 
 // <-- DB & App start -->
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 4000
 
 connect(`${process.env.MONGO_URI}`)
 	.then(() =>
