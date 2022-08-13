@@ -8,7 +8,7 @@
     "start": "node ./dist/server.js",
     "postinstall": "tsc",
     "watch-node": "nodemon ./dist/server.js",
-    "deploy": "git add . && git commit -m heroku && git push heroku master"
+    "deploy": "git add . && git commit -m heroku && git push heroku main"
   },
   "engines": { "node": "16.13.0" },
   "repository": {
