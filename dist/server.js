@@ -8,6 +8,7 @@ const express_session_1 = __importDefault(require("express-session"));
 const mongoose_1 = require("mongoose");
 const middleware_exports_1 = require("./middleware/middleware-exports");
 const passport_1 = __importDefault(require("passport"));
+const cors_1 = __importDefault(require("cors"));
 require("dotenv/config");
 const routes_exports_1 = require("./routes/routes-exports");
 const app = (0, express_1.default)();
@@ -23,6 +24,10 @@ app.use((0, express_session_1.default)({
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         secure: process.env.NODE_ENV === 'production',
     },
+}));
+app.use((0, cors_1.default)({
+    credentials: true,
+    origin: [process.env.FRONTEND_APP_URL],
 }));
 app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());

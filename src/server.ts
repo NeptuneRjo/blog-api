@@ -3,6 +3,7 @@ import session from 'express-session'
 import { connect } from 'mongoose'
 import { passportLocal } from './middleware/middleware-exports'
 import passport from 'passport'
+import cors from 'cors'
 import 'dotenv/config'
 
 import { blogRoutes, userRoutes } from './routes/routes-exports'
@@ -23,6 +24,13 @@ app.use(
 			sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
 			secure: process.env.NODE_ENV === 'production',
 		},
+	})
+)
+
+app.use(
+	cors({
+		credentials: true,
+		origin: [process.env.FRONTEND_APP_URL as string],
 	})
 )
 
