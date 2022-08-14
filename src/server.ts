@@ -3,11 +3,14 @@ import session from 'express-session'
 import { connect } from 'mongoose'
 import { passportLocal } from './middleware/middleware-exports'
 import passport from 'passport'
+import cors from 'cors'
 import 'dotenv/config'
 
 import { blogRoutes, userRoutes } from './routes/routes-exports'
 
 const app = express()
+app.use(cors)
+
 passportLocal() // Passport strategy and serialization
 
 // <-- Middleware -->

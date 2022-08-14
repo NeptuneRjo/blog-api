@@ -8,9 +8,11 @@ const express_session_1 = __importDefault(require("express-session"));
 const mongoose_1 = require("mongoose");
 const middleware_exports_1 = require("./middleware/middleware-exports");
 const passport_1 = __importDefault(require("passport"));
+const cors_1 = __importDefault(require("cors"));
 require("dotenv/config");
 const routes_exports_1 = require("./routes/routes-exports");
 const app = (0, express_1.default)();
+app.use(cors_1.default);
 (0, middleware_exports_1.passportLocal)(); // Passport strategy and serialization
 // <-- Middleware -->
 app.use(express_1.default.json());
