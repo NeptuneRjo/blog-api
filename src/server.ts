@@ -3,7 +3,6 @@ import session from 'express-session'
 import { connect } from 'mongoose'
 import { passportLocal } from './middleware/middleware-exports'
 import passport from 'passport'
-import cors from 'cors'
 import 'dotenv/config'
 
 import { blogRoutes, userRoutes } from './routes/routes-exports'
@@ -22,8 +21,6 @@ app.use(
 		saveUninitialized: false,
 	})
 )
-
-app.use(cors())
 
 app.use(passport.initialize())
 app.use(passport.session())
