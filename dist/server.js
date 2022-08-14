@@ -12,7 +12,7 @@ const cors_1 = __importDefault(require("cors"));
 require("dotenv/config");
 const routes_exports_1 = require("./routes/routes-exports");
 const app = (0, express_1.default)();
-app.use(cors_1.default);
+app.use((0, cors_1.default)());
 (0, middleware_exports_1.passportLocal)(); // Passport strategy and serialization
 // <-- Middleware -->
 app.use(express_1.default.json());

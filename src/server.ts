@@ -9,7 +9,7 @@ import 'dotenv/config'
 import { blogRoutes, userRoutes } from './routes/routes-exports'
 
 const app = express()
-app.use(cors)
+app.use(cors())
 
 passportLocal() // Passport strategy and serialization
 
