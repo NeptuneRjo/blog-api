@@ -20,19 +20,10 @@ app.use(
 		secret: process.env.WEB_SECRET as string,
 		resave: true,
 		saveUninitialized: false,
-		cookie: {
-			sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-			secure: process.env.NODE_ENV === 'production',
-		},
 	})
 )
 
-app.use(
-	cors({
-		credentials: true,
-		origin: [process.env.FRONTEND_APP_URL as string],
-	})
-)
+app.use(cors())
 
 app.use(passport.initialize())
 app.use(passport.session())
