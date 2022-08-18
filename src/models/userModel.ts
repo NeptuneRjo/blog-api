@@ -12,6 +12,14 @@ const userModel = new Schema({
 		required: [true, 'Please eneter a password'],
 		minlength: [6, 'Minimum password length is 6 characters'],
 	},
+	role: {
+		type: String,
+		default: 'User',
+	},
+	username: {
+		type: String,
+		required: true,
+	},
 })
 
 userModel.pre('save', async function (next) {
