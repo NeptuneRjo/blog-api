@@ -10,7 +10,6 @@ export function passportLocal() {
 		new LocalStrategy(
 			{ usernameField: 'email', passwordField: 'password' },
 			(email, password, done) => {
-				console.log('local')
 				User.findOne({ email }, (err: any, user: { password: string }) => {
 					if (err) return done(err)
 					if (!user) return done(null, false)
@@ -18,7 +17,6 @@ export function passportLocal() {
 					if (password !== user.password) {
 						compare(password, user.password, (err, res) => {
 							if (res) {
-								console.log(res)
 								return done(null, user)
 							} else {
 								return done(null, false, { message: message })
