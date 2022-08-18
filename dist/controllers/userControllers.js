@@ -30,8 +30,15 @@ const get_user = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.get_user = get_user;
 const get_current_user = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let user = req.user;
-    if (req.user) {
-        res.json({ user: { email: user === null || user === void 0 ? void 0 : user.email, id: user === null || user === void 0 ? void 0 : user._id } });
+    if (req.user !== undefined) {
+        res.json({
+            user: {
+                email: user === null || user === void 0 ? void 0 : user.email,
+                id: user === null || user === void 0 ? void 0 : user._id,
+                role: user === null || user === void 0 ? void 0 : user.role,
+                username: user === null || user === void 0 ? void 0 : user.username,
+            },
+        });
     }
     else {
         res.json({ user });
@@ -53,12 +60,14 @@ const login_user = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
     let user = req.user;
     if (req.user) {
         res.status(200).json({
-            msg: 'User authenticated',
-            user: { email: user.email, id: user._id },
+            email: user.email,
+            id: user._id,
+            role: user.role,
+            username: user.username,
         });
     }
     else {
-        res.status(400).json({ msg: 'Unable to authenticate user' });
+        res.status(400).json({ user });
     }
 });
 exports.login_user = login_user;
@@ -66,7 +75,7 @@ const logout_user = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     req.logout((err) => {
         if (err)
             return next(err);
-        res.status(200).json({ msg: 'User logged out', user: req.user });
+        res.status(200).json(req.user);
     });
 });
 exports.logout_user = logout_user;

@@ -11,7 +11,6 @@ const passport_1 = __importDefault(require("passport"));
 const message = 'Incorrect password';
 function passportLocal() {
     passport_1.default.use(new passport_local_1.Strategy({ usernameField: 'email', passwordField: 'password' }, (email, password, done) => {
-        console.log('local');
         models_exports_1.User.findOne({ email }, (err, user) => {
             if (err)
                 return done(err);
@@ -20,7 +19,6 @@ function passportLocal() {
             if (password !== user.password) {
                 (0, bcryptjs_1.compare)(password, user.password, (err, res) => {
                     if (res) {
-                        console.log(res);
                         return done(null, user);
                     }
                     else {

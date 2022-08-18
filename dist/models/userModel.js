@@ -22,6 +22,14 @@ const userModel = new mongoose_1.Schema({
         required: [true, 'Please eneter a password'],
         minlength: [6, 'Minimum password length is 6 characters'],
     },
+    role: {
+        type: String,
+        default: 'User',
+    },
+    username: {
+        type: String,
+        required: true,
+    },
 });
 userModel.pre('save', function (next) {
     return __awaiter(this, void 0, void 0, function* () {
