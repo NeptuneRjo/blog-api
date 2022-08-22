@@ -7,13 +7,14 @@ import { Types } from 'mongoose'
 export const get_all_blogs = async (
 	req: Request,
 	res: Response
-): Promise<void> => {
-	try {
-		const blogs = await Blog.find({})
-		res.status(200).json(blogs)
-	} catch (error) {
-		res.status(404).json({ error })
+): Promise<void | Response> => {
+	const blogs = await Blog.find({})
+
+	if (!blogs) {
+		return res.status(404).json({ error: 'Unable to find any blogs' })
 	}
+
+	res.status(200).json({ data: blogs })
 }
 
 export const get_blog = async (
@@ -23,20 +24,16 @@ export const get_blog = async (
 	const { id } = req.params
 
 	if (!Types.ObjectId.isValid(id)) {
-		return res.status(404).json({ error: 'No workout found' })
+		return res.status(404).json({ error: 'Invalid id' })
 	}
 
-	try {
-		const blog = await Blog.findById(req.params.id)
+	const blog = await Blog.findById(id)
 
-		if (!blog) {
-			res.status(404).json({ error: 'No blog found with this id.' })
-		} else {
-			res.status(200).json(blog)
-		}
-	} catch (error) {
-		res.status(404).json({ error })
+	if (!blog) {
+		return res.status(404).json({ error: 'No blog found with that id' })
 	}
+
+	res.status(200).json({ data: blog })
 }
 
 // POST Requests
@@ -44,12 +41,9 @@ export const get_blog = async (
 export const post_blog = async (req: Request, res: Response): Promise<void> => {
 	const { title, body, author } = req.body
 
-	try {
-		const blog = await Blog.create({ title, body, author })
-		res.status(201).json(blog)
-	} catch (error) {
-		res.status(400).json({ error })
-	}
+	Blog.create({ title, body, author })
+		.then((blog) => res.status(201).json({ data: blog }))
+		.catch((err) => res.status(400).json({ error: 'Could not create blog' }))
 }
 
 // PATCH Requests
@@ -61,17 +55,20 @@ export const patch_blog = async (
 	const { id } = req.params
 
 	if (!Types.ObjectId.isValid(id)) {
-		return res.status(404).json({ error: 'No blog found' })
+		return res.status(404).json({ error: 'Invalid id' })
 	}
 
-	try {
-		const blog = await Blog.findOneAndUpdate({ _id: id }, req.body)
-		const updatedBlog = await Blog.findById(id)
+	const blog = await Blog.findOneAndUpdate({ _id: id }, req.body)
+	const updatedBlog = await Blog.findById(id)
 
-		res.status(200).json(updatedBlog)
-	} catch (error) {
-		res.status(404).json({ error })
+	if (!blog) {
+		return res.status(404).json({ error: 'No blog found with this id' })
 	}
+	if (!updatedBlog) {
+		return res.status(404).json({ error: 'No blog found with this id' })
+	}
+
+	res.status(200).json({ data: updatedBlog })
 }
 
 // DELETE Requests
@@ -83,18 +80,14 @@ export const delete_blog = async (
 	const { id } = req.params
 
 	if (!Types.ObjectId.isValid(id)) {
-		return res.status(404).json({ error: 'No blog found' })
+		return res.status(404).json({ error: 'Invalid id' })
 	}
 
-	try {
-		const blog = await Blog.findOneAndDelete({ _id: id })
+	const blog = await Blog.findOneAndDelete({ _id: id })
 
-		if (!blog) {
-			res.status(404).json({ error: 'No blog found with this id.' })
-		} else {
-			res.status(200).json(blog)
-		}
-	} catch (error) {
-		res.status(404).json({ error })
+	if (!blog) {
+		return res.status(404).json({ error: 'No blog found with this id' })
 	}
+
+	res.status(200).json({ data: blog })
 }
