@@ -39,9 +39,7 @@ export const get_blog = async (
 // POST Requests
 
 export const post_blog = async (req: Request, res: Response): Promise<void> => {
-	const { title, body, author } = req.body
-
-	Blog.create({ title, body, author })
+	Blog.create(req.body)
 		.then((blog) => res.status(201).json({ data: blog }))
 		.catch((err) => res.status(400).json({ error: 'Could not create blog' }))
 }
