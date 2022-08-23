@@ -107,9 +107,11 @@ export const logout_user = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
-): Promise<void | NextFunction> => {
+): Promise<void | Response> => {
 	req.logout((err) => {
-		if (err) return next(err)
+		if (err) {
+			return res.status(400).json({ error: 'Error logging out user' })
+		}
 		res.status(200).json({ data: req.user })
 	})
 }

@@ -41,7 +41,7 @@ export const get_blog = async (
 export const post_blog = async (req: Request, res: Response): Promise<void> => {
 	Blog.create(req.body)
 		.then((blog) => res.status(201).json({ data: blog }))
-		.catch((err) => res.status(400).json({ error: 'Could not create blog' }))
+		.catch((err) => res.status(400).json({ error: 'Unable to create blog' }))
 }
 
 // PATCH Requests
