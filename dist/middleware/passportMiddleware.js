@@ -15,7 +15,7 @@ function passportLocal() {
             if (err)
                 return done(err);
             if (!user)
-                return done(null, false);
+                return done(null, user);
             if (password !== user.password) {
                 (0, bcryptjs_1.compare)(password, user.password, (err, res) => {
                     if (res) {

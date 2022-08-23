@@ -14,79 +14,59 @@ const models_exports_1 = require("../models/models-exports");
 const mongoose_1 = require("mongoose");
 // GET Requests
 const get_all_blogs = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const blogs = yield models_exports_1.Blog.find({});
-        res.status(200).json(blogs);
+    const blogs = yield models_exports_1.Blog.find({});
+    if (!blogs) {
+        return res.status(404).json({ error: 'Unable to find any blogs' });
     }
-    catch (error) {
-        res.status(404).json({ error });
-    }
+    res.status(200).json({ data: blogs });
 });
 exports.get_all_blogs = get_all_blogs;
 const get_blog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     if (!mongoose_1.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({ error: 'No workout found' });
+        return res.status(404).json({ error: 'Invalid id' });
     }
-    try {
-        const blog = yield models_exports_1.Blog.findById(req.params.id);
-        if (!blog) {
-            res.status(404).json({ error: 'No blog found with this id.' });
-        }
-        else {
-            res.status(200).json(blog);
-        }
+    const blog = yield models_exports_1.Blog.findById(id);
+    if (!blog) {
+        return res.status(404).json({ error: 'No blog found with that id' });
     }
-    catch (error) {
-        res.status(404).json({ error });
-    }
+    res.status(200).json({ data: blog });
 });
 exports.get_blog = get_blog;
 // POST Requests
 const post_blog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { title, body, author } = req.body;
-    try {
-        const blog = yield models_exports_1.Blog.create({ title, body, author });
-        res.status(201).json(blog);
-    }
-    catch (error) {
-        res.status(400).json({ error });
-    }
+    models_exports_1.Blog.create(req.body)
+        .then((blog) => res.status(201).json({ data: blog }))
+        .catch((err) => res.status(400).json({ error: 'Unable to create blog' }));
 });
 exports.post_blog = post_blog;
 // PATCH Requests
 const patch_blog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     if (!mongoose_1.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({ error: 'No blog found' });
+        return res.status(404).json({ error: 'Invalid id' });
     }
-    try {
-        const blog = yield models_exports_1.Blog.findOneAndUpdate({ _id: id }, req.body);
-        const updatedBlog = yield models_exports_1.Blog.findById(id);
-        res.status(200).json(updatedBlog);
+    const blog = yield models_exports_1.Blog.findOneAndUpdate({ _id: id }, req.body);
+    const updatedBlog = yield models_exports_1.Blog.findById(id);
+    if (!blog) {
+        return res.status(404).json({ error: 'No blog found with this id' });
     }
-    catch (error) {
-        res.status(404).json({ error });
+    if (!updatedBlog) {
+        return res.status(404).json({ error: 'No blog found with this id' });
     }
+    res.status(200).json({ data: updatedBlog });
 });
 exports.patch_blog = patch_blog;
 // DELETE Requests
 const delete_blog = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     if (!mongoose_1.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({ error: 'No blog found' });
+        return res.status(404).json({ error: 'Invalid id' });
     }
-    try {
-        const blog = yield models_exports_1.Blog.findOneAndDelete({ _id: id });
-        if (!blog) {
-            res.status(404).json({ error: 'No blog found with this id.' });
-        }
-        else {
-            res.status(200).json(blog);
-        }
+    const blog = yield models_exports_1.Blog.findOneAndDelete({ _id: id });
+    if (!blog) {
+        return res.status(404).json({ error: 'No blog found with this id' });
     }
-    catch (error) {
-        res.status(404).json({ error });
-    }
+    res.status(200).json({ data: blog });
 });
 exports.delete_blog = delete_blog;
