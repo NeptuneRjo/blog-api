@@ -12,7 +12,7 @@ export function passportLocal() {
 			(email, password, done) => {
 				User.findOne({ email }, (err: any, user: { password: string }) => {
 					if (err) return done(err)
-					if (!user) return done(null, false)
+					if (!user) return done(null, user)
 
 					if (password !== user.password) {
 						compare(password, user.password, (err, res) => {
