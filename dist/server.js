@@ -17,6 +17,7 @@ app.use((0, cors_1.default)({
         'https://neptunerjo.github.io/blog-api-frontend/',
         'https://neptunerjo.github.io',
         'https://neptunerjo.github.io/blog-api-frontend/#/',
+        'https://neptunerjo.github.io/',
     ],
     methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', 'DELETE'],
     credentials: true,
