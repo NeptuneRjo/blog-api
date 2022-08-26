@@ -11,7 +11,7 @@ import { blogRoutes, userRoutes } from './routes/routes-exports'
 const app = express()
 app.use(
 	cors({
-		origin: 'https://neptunerjo.github.io/blog-api-frontend',
+		origin: 'https://neptunerjo.github.io',
 		methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', 'DELETE'],
 		credentials: true,
 	})

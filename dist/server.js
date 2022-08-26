@@ -13,7 +13,7 @@ require("dotenv/config");
 const routes_exports_1 = require("./routes/routes-exports");
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: 'https://neptunerjo.github.io/blog-api-frontend',
+    origin: 'https://neptunerjo.github.io',
     methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', 'DELETE'],
     credentials: true,
 }));
