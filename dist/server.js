@@ -13,7 +13,10 @@ require("dotenv/config");
 const routes_exports_1 = require("./routes/routes-exports");
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: 'https://neptunerjo.github.io',
+    origin: [
+        'https://neptunerjo.github.io/blog-api-frontend/',
+        'http://localhost:3000',
+    ],
     methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', 'DELETE'],
     credentials: true,
 }));
@@ -29,7 +32,7 @@ app.use((0, express_session_1.default)({
     cookie: {
         sameSite: 'none',
         path: '/',
-        secure: process.env.NODE_ENV === 'production' ? true : false,
+        secure: true,
         maxAge: 1 * 1000 * 100,
     },
 }));
