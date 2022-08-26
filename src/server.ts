@@ -13,7 +13,8 @@ app.use(
 	cors({
 		origin: [
 			'https://neptunerjo.github.io/blog-api-frontend/',
-			'http://localhost:3000',
+			'https://neptunerjo.github.io',
+			'https://neptunerjo.github.io/blog-api-frontend/#/',
 		],
 		methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', 'DELETE'],
 		credentials: true,
