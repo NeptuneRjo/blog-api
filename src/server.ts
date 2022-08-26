@@ -11,7 +11,7 @@ import { blogRoutes, userRoutes } from './routes/routes-exports'
 const app = express()
 app.use(
 	cors({
-		origin: 'http://localhost:3000',
+		origin: ['http://localhost:3000', 'https://neptunerjo.github.io/'],
 		methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', 'DELETE'],
 		credentials: true,
 	})
