@@ -12,7 +12,11 @@ const cors_1 = __importDefault(require("cors"));
 require("dotenv/config");
 const routes_exports_1 = require("./routes/routes-exports");
 const app = (0, express_1.default)();
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: 'http://localhost:3000',
+    methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', 'DELETE'],
+    credentials: true,
+}));
 (0, middleware_exports_1.passportLocal)(); // Passport strategy and serialization
 // <-- Middleware -->
 app.use(express_1.default.json());
@@ -21,6 +25,13 @@ app.use((0, express_session_1.default)({
     secret: process.env.WEB_SECRET,
     resave: true,
     saveUninitialized: false,
+    rolling: true,
+    cookie: {
+        sameSite: 'none',
+        path: '/',
+        secure: process.env.NODE_ENV === 'production' ? true : false,
+        maxAge: 1 * 1000 * 100,
+    },
 }));
 app.use(passport_1.default.initialize());
 app.use(passport_1.default.session());

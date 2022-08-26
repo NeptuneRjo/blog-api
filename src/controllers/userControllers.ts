@@ -87,20 +87,16 @@ export const login_user = async (
 ): Promise<void> => {
 	let user = req.user as any
 
-	if (req.user) {
-		res.status(200).json({
-			data: {
-				user: {
-					email: user?.email,
-					id: user?._id,
-					role: user?.role,
-					username: user?.username,
-				},
+	res.status(200).json({
+		data: {
+			user: {
+				email: user?.email,
+				id: user?._id,
+				role: user?.role,
+				username: user?.username,
 			},
-		})
-	} else {
-		res.status(200).json({ data: req.user })
-	}
+		},
+	})
 }
 
 export const logout_user = async (
@@ -112,6 +108,7 @@ export const logout_user = async (
 		if (err) {
 			return res.status(400).json({ error: 'Error logging out user' })
 		}
+
 		res.status(200).json({ data: req.user })
 	})
 }

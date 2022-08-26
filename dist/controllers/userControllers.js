@@ -78,21 +78,16 @@ const signup_user = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
 exports.signup_user = signup_user;
 const login_user = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let user = req.user;
-    if (req.user) {
-        res.status(200).json({
-            data: {
-                user: {
-                    email: user === null || user === void 0 ? void 0 : user.email,
-                    id: user === null || user === void 0 ? void 0 : user._id,
-                    role: user === null || user === void 0 ? void 0 : user.role,
-                    username: user === null || user === void 0 ? void 0 : user.username,
-                },
+    res.status(200).json({
+        data: {
+            user: {
+                email: user === null || user === void 0 ? void 0 : user.email,
+                id: user === null || user === void 0 ? void 0 : user._id,
+                role: user === null || user === void 0 ? void 0 : user.role,
+                username: user === null || user === void 0 ? void 0 : user.username,
             },
-        });
-    }
-    else {
-        res.status(200).json({ data: req.user });
-    }
+        },
+    });
 });
 exports.login_user = login_user;
 const logout_user = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {

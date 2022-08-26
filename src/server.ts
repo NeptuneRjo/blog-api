@@ -9,11 +9,18 @@ import 'dotenv/config'
 import { blogRoutes, userRoutes } from './routes/routes-exports'
 
 const app = express()
-app.use(cors())
+app.use(
+	cors({
+		origin: 'http://localhost:3000',
+		methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', 'DELETE'],
+		credentials: true,
+	})
+)
 
 passportLocal() // Passport strategy and serialization
 
 // <-- Middleware -->
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
@@ -22,6 +29,13 @@ app.use(
 		secret: process.env.WEB_SECRET as string,
 		resave: true,
 		saveUninitialized: false,
+		rolling: true,
+		cookie: {
+			sameSite: 'none',
+			path: '/',
+			secure: process.env.NODE_ENV === 'production' ? true : false,
+			maxAge: 1 * 1000 * 100,
+		},
 	})
 )
 
