@@ -35,7 +35,6 @@ app.use((0, express_session_1.default)({
     cookie: {
         sameSite: 'none',
         path: '/',
-        // secure: true,
         maxAge: 1 * 1000 * 100,
     },
 }));
