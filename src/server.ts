@@ -12,13 +12,11 @@ const app = express()
 app.use(
 	cors({
 		origin: [
-			'https://neptunerjo.github.io/blog-api-frontend/',
 			'https://neptunerjo.github.io',
-			'https://neptunerjo.github.io/blog-api-frontend/#/',
 			'https://neptunerjo.github.io/',
 			'http://localhost:3000',
 		],
-		methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', 'DELETE'],
+		methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', 'DELETE', 'PATCH'],
 		credentials: true,
 	})
 )
@@ -38,8 +36,6 @@ app.use(
 		rolling: true,
 		cookie: {
 			sameSite: 'none',
-			path: '/',
-			maxAge: 1 * 1000 * 100,
 		},
 	})
 )

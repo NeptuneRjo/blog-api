@@ -14,13 +14,11 @@ const routes_exports_1 = require("./routes/routes-exports");
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
     origin: [
-        'https://neptunerjo.github.io/blog-api-frontend/',
         'https://neptunerjo.github.io',
-        'https://neptunerjo.github.io/blog-api-frontend/#/',
         'https://neptunerjo.github.io/',
         'http://localhost:3000',
     ],
-    methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', 'DELETE'],
+    methods: ['POST', 'PUT', 'GET', 'OPTIONS', 'HEAD', 'DELETE', 'PATCH'],
     credentials: true,
 }));
 (0, middleware_exports_1.passportLocal)(); // Passport strategy and serialization
@@ -34,8 +32,6 @@ app.use((0, express_session_1.default)({
     rolling: true,
     cookie: {
         sameSite: 'none',
-        path: '/',
-        maxAge: 1 * 1000 * 100,
     },
 }));
 app.use(passport_1.default.initialize());
