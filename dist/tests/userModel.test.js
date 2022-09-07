@@ -12,11 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const blogModel_1 = __importDefault(require("../models/blogModel"));
+const userModel_1 = __importDefault(require("../models/userModel"));
 const fixtures_1 = require("./fixtures");
 require("jest");
 const mongoConfigTesting_1 = require("../config/mongoConfigTesting");
-describe('Blog Model', () => {
+describe('User Model', () => {
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
         const mongoServer = yield (0, mongoConfigTesting_1.initializeMongoServer)();
     }));
@@ -26,16 +26,16 @@ describe('Blog Model', () => {
     afterEach(() => __awaiter(void 0, void 0, void 0, function* () {
         yield (0, mongoConfigTesting_1.dropCollections)();
     }));
-    it('should create a blog item successfully', () => __awaiter(void 0, void 0, void 0, function* () {
-        const newBlog = yield blogModel_1.default.create(fixtures_1.fakeBlogData);
+    it('should create a user item successfully', () => __awaiter(void 0, void 0, void 0, function* () {
+        const newBlog = yield userModel_1.default.create(fixtures_1.fakeUserData);
         expect(newBlog._id).toBeDefined();
-        expect(newBlog.body).toBe(newBlog.body);
-        expect(newBlog.title).toBe(newBlog.title);
-        expect(newBlog.date).toBe(newBlog.date);
-        expect(newBlog.comments).toBe(newBlog.comments);
+        expect(newBlog.email).toBe(newBlog.email);
+        expect(newBlog.role).toBe(newBlog.role);
+        expect(newBlog.username).toBe(newBlog.username);
+        expect(newBlog.password).toBe(newBlog.password);
     }));
-    it('should fail the blog item without the required fields', () => __awaiter(void 0, void 0, void 0, function* () {
-        const newBlog = new blogModel_1.default(fixtures_1.fakeFailBlogData);
+    it('should fail the user item without the required fields', () => __awaiter(void 0, void 0, void 0, function* () {
+        const newBlog = new userModel_1.default(fixtures_1.fakeFailUserData);
         newBlog.validate((err) => {
             expect(err).not.toBe(null);
         });
