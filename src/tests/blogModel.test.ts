@@ -31,10 +31,19 @@ describe('Blog Model', () => {
 	})
 
 	it('should fail the blog item without the required fields', async () => {
-		const newBlog = new Blog(fakeFailBlogData)
+		const newBlog = new Blog()
 
 		newBlog.validate((err) => {
 			expect(err).not.toBe(null)
 		})
+	})
+
+	it('should fail the blog item with fields of wrong type', async () => {
+		try {
+			const newBlog = new Blog(fakeFailBlogData)
+			await newBlog.validate()
+		} catch (error) {
+			expect(error).not.toBe(null)
+		}
 	})
 })

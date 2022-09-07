@@ -31,10 +31,19 @@ describe('User Model', () => {
 	})
 
 	it('should fail the user item without the required fields', async () => {
-		const newBlog = new User(fakeFailUserData)
+		const newBlog = new User()
 
 		newBlog.validate((err) => {
 			expect(err).not.toBe(null)
 		})
+	})
+
+	it('should fail the user item with fields of wrong type', async () => {
+		try {
+			const newUser = new User(fakeFailUserData)
+			await newUser.validate()
+		} catch (error) {
+			expect(error).not.toBe(null)
+		}
 	})
 })
