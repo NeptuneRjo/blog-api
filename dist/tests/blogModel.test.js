@@ -35,9 +35,18 @@ describe('Blog Model', () => {
         expect(newBlog.comments).toBe(newBlog.comments);
     }));
     it('should fail the blog item without the required fields', () => __awaiter(void 0, void 0, void 0, function* () {
-        const newBlog = new blogModel_1.default(fixtures_1.fakeFailBlogData);
+        const newBlog = new blogModel_1.default();
         newBlog.validate((err) => {
             expect(err).not.toBe(null);
         });
+    }));
+    it('should fail the blog item with fields of wrong type', () => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const newBlog = new blogModel_1.default(fixtures_1.fakeFailBlogData);
+            yield newBlog.validate();
+        }
+        catch (error) {
+            expect(error).not.toBe(null);
+        }
     }));
 });

@@ -35,9 +35,18 @@ describe('User Model', () => {
         expect(newBlog.password).toBe(newBlog.password);
     }));
     it('should fail the user item without the required fields', () => __awaiter(void 0, void 0, void 0, function* () {
-        const newBlog = new userModel_1.default(fixtures_1.fakeFailUserData);
+        const newBlog = new userModel_1.default();
         newBlog.validate((err) => {
             expect(err).not.toBe(null);
         });
+    }));
+    it('should fail the user item with fields of wrong type', () => __awaiter(void 0, void 0, void 0, function* () {
+        try {
+            const newUser = new userModel_1.default(fixtures_1.fakeFailUserData);
+            yield newUser.validate();
+        }
+        catch (error) {
+            expect(error).not.toBe(null);
+        }
     }));
 });

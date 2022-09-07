@@ -14,7 +14,9 @@ exports.fakeBlogData = {
     ],
 };
 exports.fakeFailBlogData = {
+    title: 1,
     body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    author: 'NeptuneRjo',
     date: '2022-08-21T07:01:25.769Z',
     comments: [
         {
@@ -30,6 +32,8 @@ exports.fakeUserData = {
     username: 'dummyUser',
 };
 exports.fakeFailUserData = {
+    email: 123,
     password: 'dummypassword',
     role: 'Admin',
+    username: 'dummyUser',
 };
