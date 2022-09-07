@@ -1,9 +1,10 @@
 import express from 'express'
 import session from 'express-session'
-import { connect } from 'mongoose'
+import { connect, connection } from 'mongoose'
 import { passportLocal } from './middleware/middleware-exports'
 import passport from 'passport'
 import cors from 'cors'
+import './config/mongoConfig'
 import 'dotenv/config'
 
 import { blogRoutes, userRoutes } from './routes/routes-exports'
@@ -51,10 +52,8 @@ app.use('/api/blogs', blogRoutes)
 // <-- DB & App start -->
 const port = process.env.PORT || 4000
 
-connect(`${process.env.MONGO_URI}`)
-	.then(() =>
-		app.listen(port, () =>
-			console.log('Connected to DB and listening on port:', port)
-		)
+connection.on('connected', () => {
+	app.listen(port, () =>
+		console.log('Connected to DB and listening on port:', port)
 	)
-	.catch((err) => console.log(err))
+})
