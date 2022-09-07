@@ -9,10 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.dropCollections = exports.deinitializeMongoServer = exports.initializeMongoServer = void 0;
 const mongodb_memory_server_1 = require("mongodb-memory-server");
 const mongoose_1 = require("mongoose");
+let mongoServer = null;
 const initializeMongoServer = () => __awaiter(void 0, void 0, void 0, function* () {
-    const mongoServer = yield mongodb_memory_server_1.MongoMemoryServer.create();
+    mongoServer = yield mongodb_memory_server_1.MongoMemoryServer.create();
     const mongoUri = mongoServer.getUri();
     (0, mongoose_1.connect)(mongoUri);
     mongoose_1.connection.on('error', (e) => {
@@ -23,4 +25,21 @@ const initializeMongoServer = () => __awaiter(void 0, void 0, void 0, function* 
         console.log(e);
     });
 });
-exports.default = initializeMongoServer;
+exports.initializeMongoServer = initializeMongoServer;
+const deinitializeMongoServer = () => __awaiter(void 0, void 0, void 0, function* () {
+    if (mongoServer) {
+        yield mongoose_1.connection.dropDatabase();
+        yield mongoose_1.connection.close();
+        yield mongoServer.stop();
+    }
+});
+exports.deinitializeMongoServer = deinitializeMongoServer;
+const dropCollections = () => __awaiter(void 0, void 0, void 0, function* () {
+    if (mongoServer) {
+        const collections = yield mongoose_1.connection.db.collections();
+        for (let collection of collections) {
+            yield collection.drop();
+        }
+    }
+});
+exports.dropCollections = dropCollections;

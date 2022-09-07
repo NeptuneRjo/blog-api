@@ -16,13 +16,13 @@ const routes_exports_1 = require("../routes/routes-exports");
 const supertest_1 = __importDefault(require("supertest"));
 const express_1 = __importDefault(require("express"));
 require("jest");
-const mongoConfigTesting_1 = __importDefault(require("../config/mongoConfigTesting"));
+const mongoConfigTesting_1 = require("../config/mongoConfigTesting");
 const app = (0, express_1.default)();
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use('/api/blogs', routes_exports_1.blogRoutes);
 describe('MongoMemoryServer', () => {
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
-        const mongoServer = yield (0, mongoConfigTesting_1.default)();
+        const mongoServer = yield (0, mongoConfigTesting_1.initializeMongoServer)();
     }));
     describe('GET /api/blogs', () => {
         it('responds with json', (done) => {
