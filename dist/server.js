@@ -9,6 +9,7 @@ const mongoose_1 = require("mongoose");
 const middleware_exports_1 = require("./middleware/middleware-exports");
 const passport_1 = __importDefault(require("passport"));
 const cors_1 = __importDefault(require("cors"));
+require("./config/mongoConfig");
 require("dotenv/config");
 const routes_exports_1 = require("./routes/routes-exports");
 const app = (0, express_1.default)();
@@ -42,6 +43,6 @@ app.use('/api/users', routes_exports_1.userRoutes);
 app.use('/api/blogs', routes_exports_1.blogRoutes);
 // <-- DB & App start -->
 const port = process.env.PORT || 4000;
-(0, mongoose_1.connect)(`${process.env.MONGO_URI}`)
-    .then(() => app.listen(port, () => console.log('Connected to DB and listening on port:', port)))
-    .catch((err) => console.log(err));
+mongoose_1.connection.on('connected', () => {
+    app.listen(port, () => console.log('Connected to DB and listening on port:', port));
+});
