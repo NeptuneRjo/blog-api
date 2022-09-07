@@ -34,7 +34,6 @@ describe('Blog Model', () => {
 		const newBlog = new Blog(fakeFailBlogData)
 
 		newBlog.validate((err) => {
-			// console.log(err)
 			expect(err).not.toBe(null)
 		})
 	})
