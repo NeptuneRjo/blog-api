@@ -11,6 +11,13 @@ export const fakeBlogData = {
 	],
 }
 
+export const newBlog = {
+	title: 'Test Blog 1',
+	body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+	author: 'NeptuneRjo',
+	comments: [],
+}
+
 export const fakeFailBlogData = {
 	title: 1,
 	body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
@@ -28,6 +35,12 @@ export const fakeUserData = {
 	email: 'dummy@user.com',
 	password: 'dummypassword',
 	role: 'Admin',
+	username: 'dummyUser',
+}
+
+export const newUser = {
+	email: 'dummy@user.com',
+	password: 'dummypassword',
 	username: 'dummyUser',
 }
 
