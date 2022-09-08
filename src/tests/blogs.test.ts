@@ -5,7 +5,6 @@ import {
 	deinitializeMongoServer,
 	dropCollections,
 } from '../config/mongoConfigTesting'
-import Blog from '../models/blogModel'
 import { fakeBlogData, newBlog } from './fixtures'
 import 'dotenv/config'
 
@@ -123,10 +122,18 @@ describe('Blog Tests', () => {
 	describe('PATCH /api/blogs/:id', () => {
 		let id: string | null = null
 
-		beforeAll(async () => {
-			const newBlog = await Blog.create(fakeBlogData)
+		loginUser()
 
-			id = JSON.stringify(newBlog?._id)
+		it('POST blog when user is authorized', (done) => {
+			server
+				.post('/api/blogs')
+				.send(fakeBlogData)
+				.expect(201)
+				.end((err, res) => {
+					if (err) return done(err)
+					id = res.body.data._id
+					done()
+				})
 		})
 
 		it('patches blog and responds with JSON', (done) => {
