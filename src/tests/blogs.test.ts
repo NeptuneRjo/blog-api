@@ -110,4 +110,24 @@ describe('MongoMemoryServer', () => {
 			})
 		})
 	})
+
+	describe('PATCH /api/blogs/:id', () => {
+		let id: string | null = null
+
+		beforeAll(async () => {
+			const newBlog = await Blog.create(fakeBlogData)
+
+			id = JSON.stringify(newBlog?._id)
+		})
+
+		it('patches blog and responds with JSON', (done) => {
+			server
+				.patch(`/api/blogs/${id}`)
+				.send({
+					comments: [{ body: 'dummy comment', username: 'dummyUsername' }],
+				})
+				.expect('Content-Type', /json/)
+				.expect(200, () => done())
+		})
+	})
 })
