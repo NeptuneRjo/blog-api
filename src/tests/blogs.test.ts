@@ -11,7 +11,7 @@ import 'dotenv/config'
 
 const server = request.agent('http://localhost:4000')
 
-describe('MongoMemoryServer', () => {
+describe('Blog Tests', () => {
 	beforeAll(async () => {
 		const mongoServer = await initializeMongoServer()
 	})
