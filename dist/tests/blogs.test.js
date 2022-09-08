@@ -57,53 +57,55 @@ describe('MongoMemoryServer', () => {
                 .expect(200, () => done());
         });
     });
-    describe('POST /api/blogs *authorized*', () => {
-        it('login', (done) => {
-            server
-                .post('/api/users/login')
-                .send({
-                email: process.env.TEST_USER,
-                password: process.env.TEST_PASSWORD,
-            })
-                .expect(200)
-                .end((err, res) => {
-                if (err)
-                    return done(err);
-                return done();
+    describe('POST /api/blogs', () => {
+        describe('authorized', () => {
+            it('login', (done) => {
+                server
+                    .post('/api/users/login')
+                    .send({
+                    email: process.env.TEST_USER,
+                    password: process.env.TEST_PASSWORD,
+                })
+                    .expect(200)
+                    .end((err, res) => {
+                    if (err)
+                        return done(err);
+                    return done();
+                });
+            });
+            it('POST blog when user is authorized', (done) => {
+                server
+                    .post('/api/blogs')
+                    .send(fixtures_1.fakeBlogData)
+                    .expect(201)
+                    .end((err, res) => {
+                    if (err)
+                        return done(err);
+                    done();
+                });
             });
         });
-        it('POST blog when user is authorized', (done) => {
-            server
-                .post('/api/blogs')
-                .send(fixtures_1.fakeBlogData)
-                .expect(201)
-                .end((err, res) => {
-                if (err)
-                    return done(err);
-                done();
+        describe('unauthorized', () => {
+            it('logout', (done) => {
+                server
+                    .post('/api/users/logout')
+                    .expect(200)
+                    .end((err, res) => {
+                    if (err)
+                        return done(err);
+                    return done();
+                });
             });
-        });
-    });
-    describe('POST /api/blogs *unauthorized*', () => {
-        it('logout', (done) => {
-            server
-                .post('/api/users/logout')
-                .expect(200)
-                .end((err, res) => {
-                if (err)
-                    return done(err);
-                return done();
-            });
-        });
-        it('does not POST blog when user is unauthorized', (done) => {
-            server
-                .post('/api/blogs')
-                .send(fixtures_1.fakeBlogData)
-                .expect(401)
-                .end((err, res) => {
-                if (err)
-                    return done(err);
-                done();
+            it('does not POST blog when user is unauthorized', (done) => {
+                server
+                    .post('/api/blogs')
+                    .send(fixtures_1.fakeBlogData)
+                    .expect(401)
+                    .end((err, res) => {
+                    if (err)
+                        return done(err);
+                    done();
+                });
             });
         });
     });
