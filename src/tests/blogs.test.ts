@@ -1,6 +1,4 @@
-import { blogRoutes } from '../routes/routes-exports'
 import request from 'supertest'
-import express from 'express'
 import 'jest'
 import {
 	initializeMongoServer,
@@ -10,11 +8,6 @@ import {
 import Blog from '../models/blogModel'
 import { fakeBlogData, newBlog } from './fixtures'
 import 'dotenv/config'
-
-const app = express()
-
-app.use(express.urlencoded({ extended: false }))
-app.use('/api/blogs', blogRoutes)
 
 const server = request.agent('http://localhost:4000')
 
@@ -31,6 +24,34 @@ describe('MongoMemoryServer', () => {
 		await dropCollections()
 	})
 
+	const loginUser = () => {
+		it('login', (done) => {
+			server
+				.post('/api/users/login')
+				.send({
+					email: process.env.TEST_USER,
+					password: process.env.TEST_PASSWORD,
+				})
+				.expect(200)
+				.end((err, res) => {
+					if (err) return done(err)
+					return done()
+				})
+		})
+	}
+
+	const logoutUser = () => {
+		it('logout', (done) => {
+			server
+				.post('/api/users/logout')
+				.expect(200)
+				.end((err, res) => {
+					if (err) return done(err)
+					return done()
+				})
+		})
+	}
+
 	describe('GET /api/blogs', () => {
 		it('responds with json', (done) => {
 			server
@@ -44,10 +65,18 @@ describe('MongoMemoryServer', () => {
 	describe('GET /api/blogs/:id', () => {
 		let id: string | null = null
 
-		beforeAll(async () => {
-			const newBlog = await Blog.create(fakeBlogData)
+		loginUser()
 
-			id = JSON.stringify(newBlog?._id)
+		it('POST blog when user is authorized', (done) => {
+			server
+				.post('/api/blogs')
+				.send(fakeBlogData)
+				.expect(201)
+				.end((err, res) => {
+					if (err) return done(err)
+					id = res.body.data._id
+					done()
+				})
 		})
 
 		it('responds with json', (done) => {
@@ -61,24 +90,12 @@ describe('MongoMemoryServer', () => {
 
 	describe('POST /api/blogs', () => {
 		describe('authorized', () => {
-			it('login', (done) => {
-				server
-					.post('/api/users/login')
-					.send({
-						email: process.env.TEST_USER,
-						password: process.env.TEST_PASSWORD,
-					})
-					.expect(200)
-					.end((err, res) => {
-						if (err) return done(err)
-						return done()
-					})
-			})
+			loginUser()
 
 			it('POST blog when user is authorized', (done) => {
 				server
 					.post('/api/blogs')
-					.send(fakeBlogData)
+					.send(newBlog)
 					.expect(201)
 					.end((err, res) => {
 						if (err) return done(err)
@@ -88,20 +105,12 @@ describe('MongoMemoryServer', () => {
 		})
 
 		describe('unauthorized', () => {
-			it('logout', (done) => {
-				server
-					.post('/api/users/logout')
-					.expect(200)
-					.end((err, res) => {
-						if (err) return done(err)
-						return done()
-					})
-			})
+			logoutUser()
 
 			it('does not POST blog when user is unauthorized', (done) => {
 				server
 					.post('/api/blogs')
-					.send(fakeBlogData)
+					.send(newBlog)
 					.expect(401)
 					.end((err, res) => {
 						if (err) return done(err)
@@ -128,6 +137,50 @@ describe('MongoMemoryServer', () => {
 				})
 				.expect('Content-Type', /json/)
 				.expect(200, () => done())
+		})
+	})
+
+	describe('DELETE /api/blogs/:id', () => {
+		describe('authorized', () => {
+			let id: string | null = null
+
+			loginUser()
+
+			it('POST blog when user is authorized', (done) => {
+				server
+					.post('/api/blogs')
+					.send(fakeBlogData)
+					.expect(201)
+					.end((err, res) => {
+						if (err) return done(err)
+						id = res.body.data._id
+						done()
+					})
+			})
+
+			it('DELETE blog when user is unauthorized', (done) => {
+				server
+					.delete(`/api/blogs/${id}`)
+					.expect(200)
+					.end((err, res) => {
+						if (err) return done(err)
+						done()
+					})
+			})
+		})
+
+		describe('unauthorized', () => {
+			logoutUser()
+
+			it('does not DELETE blog when user is unauthorized', (done) => {
+				server
+					.delete('/api/blogs/123')
+					.expect(401)
+					.end((err, res) => {
+						if (err) return done(err)
+						done()
+					})
+			})
 		})
 	})
 })
