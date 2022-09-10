@@ -40,6 +40,7 @@ exports.fakeUserData = {
 exports.newUser = {
     email: 'dummy@user.com',
     password: 'dummypassword',
+    role: 'Admin',
     username: 'dummyUser',
 };
 exports.fakeFailUserData = {

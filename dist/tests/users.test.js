@@ -17,9 +17,13 @@ require("jest");
 const mongoConfigTesting_1 = require("../config/mongoConfigTesting");
 const fixtures_1 = require("./fixtures");
 require("dotenv/config");
-const server = supertest_1.default.agent('http://localhost:4000');
-describe('Blog Tests', () => {
-    let token;
+const express_1 = __importDefault(require("express"));
+const routes_exports_1 = require("../routes/routes-exports");
+const app = (0, express_1.default)();
+app.use(express_1.default.urlencoded({ extended: false }));
+app.use('/api/users', routes_exports_1.userRoutes);
+const server = supertest_1.default.agent(app);
+describe('User tests', () => {
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
         const mongoServer = yield (0, mongoConfigTesting_1.initializeMongoServer)();
     }));
@@ -29,38 +33,15 @@ describe('Blog Tests', () => {
     afterEach(() => __awaiter(void 0, void 0, void 0, function* () {
         yield (0, mongoConfigTesting_1.dropCollections)();
     }));
-    const loginUser = () => {
+    describe('POST /api/users/login', () => {
         it('login', (done) => {
             server
                 .post('/api/users/login')
                 .send({
-                email: 'test1@user.com',
-                password: 'testpassword',
+                email: process.env.TEST_USER,
+                password: process.env.TEST_PASSWORD,
             })
-                .set('Accept', 'application/json')
                 .expect(200)
-                .end((err, res) => {
-                token = res.body.token;
-                if (err)
-                    return done(err);
-                return done();
-            });
-        });
-    };
-    // Signup returns 200 for a new user created
-    //  OR will return 400 if user already exists
-    const createUser = () => __awaiter(void 0, void 0, void 0, function* () {
-        it('creates new user', (done) => {
-            server
-                .post('/api/users/signup')
-                .send({
-                email: 'test1@user.com',
-                password: 'testpassword',
-                username: 'testuser',
-                role: 'Admin',
-            })
-                .set('Accept', 'application/json')
-                .expect([200, 400])
                 .end((err, res) => {
                 if (err)
                     return done(err);
@@ -68,7 +49,7 @@ describe('Blog Tests', () => {
             });
         });
     });
-    const logoutUser = () => {
+    describe('POST /api/users/logout', () => {
         it('logout', (done) => {
             server
                 .post('/api/users/logout')
@@ -79,22 +60,49 @@ describe('Blog Tests', () => {
                 return done();
             });
         });
-    };
-    describe('POST /api/blogs', () => {
-        createUser();
-        loginUser();
-        it('POST new blog', (done) => {
+    });
+    describe('GET /api/users', () => {
+        it('responds with json', (done) => {
             server
-                .post('/api/blogs')
-                .send(fixtures_1.newBlog)
-                .query(token)
-                .expect(201)
+                .get('/api/users')
+                .set('Accept', 'application/json')
+                .expect('Content-Type', /json/)
+                .expect(200, () => done());
+        });
+    });
+    describe('POST /api/users/signup', () => {
+        it('POST new user', (done) => {
+            server
+                .post('/api/users/signup')
+                .send(fixtures_1.newUser)
+                .expect(200)
                 .end((err, res) => {
                 if (err)
                     return done(err);
-                return done();
+                done();
             });
         });
     });
-    describe.skip('DELETE /api/blogs/:id', () => { });
+    describe('GET /api/users/:id', () => {
+        let id = null;
+        it('POST new user', (done) => {
+            server
+                .post('/api/users/signup')
+                .send(fixtures_1.newUser)
+                .expect(200)
+                .end((err, res) => {
+                if (err)
+                    return done(err);
+                id = res.body.data._id;
+                done();
+            });
+        });
+        it('responds with json', (done) => {
+            server
+                .get(`/api/users/${id}`)
+                .set('Accept', 'application/json')
+                .expect('Content-Type', /json/)
+                .expect(200, () => done());
+        });
+    });
 });

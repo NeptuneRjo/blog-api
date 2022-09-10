@@ -72,7 +72,7 @@ const signup_user = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
                 },
             },
         }))
-            .catch(() => res.status(400).json({ error: 'Unable to sign up user' }));
+            .catch(() => res.status(406).json({ error: 'Unable to sign up user' }));
     }
 });
 exports.signup_user = signup_user;
