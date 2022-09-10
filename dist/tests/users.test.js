@@ -17,13 +17,9 @@ require("jest");
 const mongoConfigTesting_1 = require("../config/mongoConfigTesting");
 const fixtures_1 = require("./fixtures");
 require("dotenv/config");
-const express_1 = __importDefault(require("express"));
-const routes_exports_1 = require("../routes/routes-exports");
-const app = (0, express_1.default)();
-app.use(express_1.default.urlencoded({ extended: false }));
-app.use('/api/users', routes_exports_1.userRoutes);
-const server = supertest_1.default.agent(app);
+const server = supertest_1.default.agent('http://localhost:4000');
 describe('User tests', () => {
+    let token;
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
         const mongoServer = yield (0, mongoConfigTesting_1.initializeMongoServer)();
     }));
@@ -33,16 +29,38 @@ describe('User tests', () => {
     afterEach(() => __awaiter(void 0, void 0, void 0, function* () {
         yield (0, mongoConfigTesting_1.dropCollections)();
     }));
+    const createUser = () => __awaiter(void 0, void 0, void 0, function* () {
+        it('creates new user', (done) => {
+            server
+                .post('/api/users/signup')
+                .send({
+                email: 'test1@user.com',
+                password: 'testpassword',
+                username: 'testuser',
+                role: 'Admin',
+            })
+                .set('Accept', 'application/json')
+                .expect([200, 400])
+                .end((err, res) => {
+                if (err)
+                    return done(err);
+                return done();
+            });
+        });
+    });
     describe('POST /api/users/login', () => {
+        createUser();
         it('login', (done) => {
             server
                 .post('/api/users/login')
                 .send({
-                email: process.env.TEST_USER,
-                password: process.env.TEST_PASSWORD,
+                email: 'test1@user.com',
+                password: 'testpassword',
             })
+                .set('Accept', 'application/json')
                 .expect(200)
                 .end((err, res) => {
+                token = res.body.token;
                 if (err)
                     return done(err);
                 return done();
@@ -71,15 +89,21 @@ describe('User tests', () => {
         });
     });
     describe('POST /api/users/signup', () => {
-        it('POST new user', (done) => {
+        it('signs up new user', (done) => {
             server
                 .post('/api/users/signup')
-                .send(fixtures_1.newUser)
-                .expect(200)
+                .send({
+                email: 'test1@user.com',
+                password: 'testpassword',
+                username: 'testuser',
+                role: 'Admin',
+            })
+                .set('Accept', 'application/json')
+                .expect([200, 400])
                 .end((err, res) => {
                 if (err)
                     return done(err);
-                done();
+                return done();
             });
         });
     });
