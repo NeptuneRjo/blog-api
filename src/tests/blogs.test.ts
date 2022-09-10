@@ -77,124 +77,144 @@ describe('Blog Tests', () => {
 		})
 	}
 
-	describe('POST /api/blogs', () => {
+	describe('Authorized requests', () => {
 		createUser()
 		loginUser()
 
-		it('POST new blog', (done) => {
-			server
-				.post('/api/blogs')
-				.send(newBlog)
-				.query(token)
-				.expect(201)
-				.end((err, res) => {
-					if (err) return done(err)
-					return done()
-				})
+		describe('POST /api/blogs', () => {
+			it('POST new blog', (done) => {
+				server
+					.post('/api/blogs')
+					.send(newBlog)
+					.query(token)
+					.expect(201)
+					.end((err, res) => {
+						if (err) return done(err)
+						id = res.body.data._id
+						return done()
+					})
+			})
+		})
+
+		describe('DELETE /api/blogs/:id', () => {
+			it('DELETES blog', (done) => {
+				server
+					.delete(`/api/blogs/${id}`)
+					.query(token)
+					.expect(200)
+					.end((err, res) => {
+						if (err) return done(err)
+						return done()
+					})
+			})
 		})
 	})
 
-	describe('DELETE /api/blogs/:id', () => {
+	describe('Unauthorized requests', () => {
+		// Login to gain auth - create blog - logout to lose auth
 		createUser()
 		loginUser()
 
-		// Creates the blog to be deleted
-		it('POST new blog', (done) => {
-			server
-				.post('/api/blogs')
-				.send(newBlog)
-				.query(token)
-				.expect(201)
-				.end((err, res) => {
-					id = res.body.data._id
-					if (err) return done(err)
-					return done()
-				})
+		describe('POST /api/blogs', () => {
+			it('POST new blog', (done) => {
+				server
+					.post('/api/blogs')
+					.send(newBlog)
+					.expect(201)
+					.end((err, res) => {
+						if (err) return done(err)
+						return done()
+					})
+			})
 		})
 
-		it('DELETES blog', (done) => {
-			server
-				.delete(`/api/blogs/${id}`)
-				.query(token)
-				.expect(200)
-				.end((err, res) => {
-					if (err) return done(err)
-					return done()
-				})
-		})
-	})
+		logoutUser()
 
-	describe('GET /api/blogs', () => {
-		it('GETS all blogs', (done) => {
-			server
-				.get('/api/blogs')
-				.expect(200)
-				.expect('Content-Type', /json/)
-				.end((err, res) => {
-					if (err) return done(err)
-					return done()
-				})
+		describe('DELETE /api/blogs/:id', () => {
+			it('DELETES blog', (done) => {
+				server
+					.delete(`/api/blogs/${id}`)
+					.expect(401)
+					.end((err, res) => {
+						if (err) return done(err)
+						return done()
+					})
+			})
 		})
 	})
 
-	describe('GET /api/blogs/:id', () => {
+	describe('No auth required', () => {
+		// Still auths to create the blogs used
+		// in get:id and patch:id
 		createUser()
 		loginUser()
 
-		// Creates the blog to be found
-		it('POST new blog', (done) => {
-			server
-				.post('/api/blogs')
-				.send(newBlog)
-				.query(token)
-				.expect(201)
-				.end((err, res) => {
-					id = res.body.data._id
-					if (err) return done(err)
-					return done()
-				})
+		describe('GET /api/blogs', () => {
+			it('GETS all blogs', (done) => {
+				server
+					.get('/api/blogs')
+					.expect(200)
+					.expect('Content-Type', /json/)
+					.end((err, res) => {
+						if (err) return done(err)
+						return done()
+					})
+			})
 		})
 
-		it('GETS the blogs', (done) => {
-			server
-				.get(`/api/blogs/${id}`)
-				.expect(200)
-				.expect('Content-Type', /json/)
-				.end((err, res) => {
-					if (err) return done(err)
-					return done()
-				})
-		})
-	})
+		describe('GET /api/blogs/:id', () => {
+			// Creates the blog to be found
+			it('POST new blog', (done) => {
+				server
+					.post('/api/blogs')
+					.send(newBlog)
+					.query(token)
+					.expect(201)
+					.end((err, res) => {
+						id = res.body.data._id
+						if (err) return done(err)
+						return done()
+					})
+			})
 
-	describe('PATCH /api/blogs/:id', () => {
-		createUser()
-		loginUser()
-
-		// Creates the blog to be patched
-		it('POST new blog', (done) => {
-			server
-				.post('/api/blogs')
-				.send(newBlog)
-				.query(token)
-				.expect(201)
-				.end((err, res) => {
-					id = res.body.data._id
-					if (err) return done(err)
-					return done()
-				})
+			it('GETS the blog', (done) => {
+				server
+					.get(`/api/blogs/${id}`)
+					.expect(200)
+					.expect('Content-Type', /json/)
+					.end((err, res) => {
+						if (err) return done(err)
+						return done()
+					})
+			})
 		})
 
-		it('PATCHes the blogs', (done) => {
-			server
-				.patch(`/api/blogs/${id}`)
-				.send({ comments: [{ username: 'test', body: 'test' }] })
-				.expect(200)
-				.expect('Content-Type', /json/)
-				.end((err, res) => {
-					if (err) return done(err)
-					return done()
-				})
+		describe('PATCH /api/blogs/:id', () => {
+			// Creates the blog to be patched
+			it('POST new blog', (done) => {
+				server
+					.post('/api/blogs')
+					.send(newBlog)
+					.query(token)
+					.expect(201)
+					.end((err, res) => {
+						id = res.body.data._id
+						if (err) return done(err)
+						return done()
+					})
+			})
+
+			it('PATCH the blog', (done) => {
+				server
+					.patch(`/api/blogs/${id}`)
+					.send({ comments: [{ username: 'test', body: 'test' }] })
+					.expect(200)
+					.expect('Content-Type', /json/)
+					.end((err, res) => {
+						if (err) return done(err)
+						return done()
+					})
+			})
 		})
 	})
 })
