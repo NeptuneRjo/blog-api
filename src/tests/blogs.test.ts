@@ -11,6 +11,8 @@ import 'dotenv/config'
 const server = request.agent('http://localhost:4000')
 
 describe('Blog Tests', () => {
+	let token: any
+
 	beforeAll(async () => {
 		const mongoServer = await initializeMongoServer()
 	})
@@ -28,10 +30,33 @@ describe('Blog Tests', () => {
 			server
 				.post('/api/users/login')
 				.send({
-					email: process.env.TEST_USER,
-					password: process.env.TEST_PASSWORD,
+					email: 'test1@user.com',
+					password: 'testpassword',
 				})
+				.set('Accept', 'application/json')
 				.expect(200)
+				.end((err, res) => {
+					token = res.body.token
+					if (err) return done(err)
+					return done()
+				})
+		})
+	}
+
+	// Signup returns 200 for a new user created
+	//  OR will return 400 if user already exists
+	const createUser = async () => {
+		it('creates new user', (done) => {
+			server
+				.post('/api/users/signup')
+				.send({
+					email: 'test1@user.com',
+					password: 'testpassword',
+					username: 'testuser',
+					role: 'Admin',
+				})
+				.set('Accept', 'application/json')
+				.expect([200, 400])
 				.end((err, res) => {
 					if (err) return done(err)
 					return done()
@@ -51,143 +76,22 @@ describe('Blog Tests', () => {
 		})
 	}
 
-	describe('GET /api/blogs', () => {
-		it('responds with json', (done) => {
-			server
-				.get('/api/blogs')
-				.set('Accept', 'application/json')
-				.expect('Content-Type', /json/)
-				.expect(200, () => done())
-		})
-	})
-
-	describe('GET /api/blogs/:id', () => {
-		let id: string | null = null
-
-		loginUser()
-
-		it('POST blog when user is authorized', (done) => {
-			server
-				.post('/api/blogs')
-				.send(fakeBlogData)
-				.expect(201)
-				.end((err, res) => {
-					if (err) return done(err)
-					id = res.body.data._id
-					done()
-				})
-		})
-
-		it('responds with json', (done) => {
-			server
-				.get(`/api/blogs/${id}`)
-				.set('Accept', 'application/json')
-				.expect('Content-Type', /json/)
-				.expect(200, () => done())
-		})
-	})
-
 	describe('POST /api/blogs', () => {
-		describe('authorized', () => {
-			loginUser()
-
-			it('POST blog when user is authorized', (done) => {
-				server
-					.post('/api/blogs')
-					.send(newBlog)
-					.expect(201)
-					.end((err, res) => {
-						if (err) return done(err)
-						done()
-					})
-			})
-		})
-
-		describe('unauthorized', () => {
-			logoutUser()
-
-			it('does not POST blog when user is unauthorized', (done) => {
-				server
-					.post('/api/blogs')
-					.send(newBlog)
-					.expect(401)
-					.end((err, res) => {
-						if (err) return done(err)
-						done()
-					})
-			})
-		})
-	})
-
-	describe('PATCH /api/blogs/:id', () => {
-		let id: string | null = null
-
+		createUser()
 		loginUser()
 
-		it('POST blog when user is authorized', (done) => {
+		it('POST new blog', (done) => {
 			server
 				.post('/api/blogs')
-				.send(fakeBlogData)
+				.send(newBlog)
+				.query(token)
 				.expect(201)
 				.end((err, res) => {
 					if (err) return done(err)
-					id = res.body.data._id
-					done()
+					return done()
 				})
-		})
-
-		it('patches blog and responds with JSON', (done) => {
-			server
-				.patch(`/api/blogs/${id}`)
-				.send({
-					comments: [{ body: 'dummy comment', username: 'dummyUsername' }],
-				})
-				.expect('Content-Type', /json/)
-				.expect(200, () => done())
 		})
 	})
 
-	describe('DELETE /api/blogs/:id', () => {
-		describe('authorized', () => {
-			let id: string | null = null
-
-			loginUser()
-
-			it('POST blog when user is authorized', (done) => {
-				server
-					.post('/api/blogs')
-					.send(fakeBlogData)
-					.expect(201)
-					.end((err, res) => {
-						if (err) return done(err)
-						id = res.body.data._id
-						done()
-					})
-			})
-
-			it('DELETE blog when user is unauthorized', (done) => {
-				server
-					.delete(`/api/blogs/${id}`)
-					.expect(200)
-					.end((err, res) => {
-						if (err) return done(err)
-						done()
-					})
-			})
-		})
-
-		describe('unauthorized', () => {
-			logoutUser()
-
-			it('does not DELETE blog when user is unauthorized', (done) => {
-				server
-					.delete('/api/blogs/123')
-					.expect(401)
-					.end((err, res) => {
-						if (err) return done(err)
-						done()
-					})
-			})
-		})
-	})
+	describe.skip('DELETE /api/blogs/:id', () => {})
 })
