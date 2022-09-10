@@ -41,6 +41,7 @@ export const fakeUserData = {
 export const newUser = {
 	email: 'dummy@user.com',
 	password: 'dummypassword',
+	role: 'Admin',
 	username: 'dummyUser',
 }
 
