@@ -77,7 +77,7 @@ export const signup_user = async (
 					},
 				})
 			)
-			.catch(() => res.status(400).json({ error: 'Unable to sign up user' }))
+			.catch(() => res.status(406).json({ error: 'Unable to sign up user' }))
 	}
 }
 
