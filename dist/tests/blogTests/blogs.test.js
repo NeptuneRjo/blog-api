@@ -14,8 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 require("jest");
-const mongoConfigTesting_1 = require("../config/mongoConfigTesting");
-const fixtures_1 = require("./fixtures");
+const mongoConfigTesting_1 = require("../../config/mongoConfigTesting");
+const fixtures_1 = require("../fixtures");
 require("dotenv/config");
 const server = supertest_1.default.agent('http://localhost:4000');
 describe('Blog Tests', () => {

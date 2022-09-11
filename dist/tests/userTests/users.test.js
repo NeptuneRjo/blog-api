@@ -14,12 +14,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const supertest_1 = __importDefault(require("supertest"));
 require("jest");
-const mongoConfigTesting_1 = require("../config/mongoConfigTesting");
-const fixtures_1 = require("./fixtures");
+const mongoConfigTesting_1 = require("../../config/mongoConfigTesting");
 require("dotenv/config");
 const server = supertest_1.default.agent('http://localhost:4000');
 describe('User tests', () => {
-    let token;
+    let id;
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
         const mongoServer = yield (0, mongoConfigTesting_1.initializeMongoServer)();
     }));
@@ -29,8 +28,8 @@ describe('User tests', () => {
     afterEach(() => __awaiter(void 0, void 0, void 0, function* () {
         yield (0, mongoConfigTesting_1.dropCollections)();
     }));
-    const createUser = () => __awaiter(void 0, void 0, void 0, function* () {
-        it('creates new user', (done) => {
+    const createUser = () => {
+        it('signs up new user', (done) => {
             server
                 .post('/api/users/signup')
                 .send({
@@ -44,10 +43,28 @@ describe('User tests', () => {
                 .end((err, res) => {
                 if (err)
                     return done(err);
+                id = res.body.data.user.id;
                 return done();
             });
         });
-    });
+    };
+    const loginUser = () => {
+        it('login', (done) => {
+            server
+                .post('/api/users/login')
+                .send({
+                email: 'test1@user.com',
+                password: 'testpassword',
+            })
+                .set('Accept', 'application/json')
+                .expect(200)
+                .end((err, res) => {
+                if (err)
+                    return done(err);
+                return done();
+            });
+        });
+    };
     describe('POST /api/users/login', () => {
         createUser();
         it('login', (done) => {
@@ -60,7 +77,6 @@ describe('User tests', () => {
                 .set('Accept', 'application/json')
                 .expect(200)
                 .end((err, res) => {
-                token = res.body.token;
                 if (err)
                     return done(err);
                 return done();
@@ -85,21 +101,7 @@ describe('User tests', () => {
                 .get('/api/users')
                 .set('Accept', 'application/json')
                 .expect('Content-Type', /json/)
-                .expect(200, () => done());
-        });
-    });
-    describe('POST /api/users/signup', () => {
-        it('signs up new user', (done) => {
-            server
-                .post('/api/users/signup')
-                .send({
-                email: 'test1@user.com',
-                password: 'testpassword',
-                username: 'testuser',
-                role: 'Admin',
-            })
-                .set('Accept', 'application/json')
-                .expect([200, 400])
+                .expect(200)
                 .end((err, res) => {
                 if (err)
                     return done(err);
@@ -108,25 +110,21 @@ describe('User tests', () => {
         });
     });
     describe('GET /api/users/:id', () => {
-        let id = null;
-        it('POST new user', (done) => {
-            server
-                .post('/api/users/signup')
-                .send(fixtures_1.newUser)
-                .expect(200)
-                .end((err, res) => {
-                if (err)
-                    return done(err);
-                id = res.body.data._id;
-                done();
-            });
-        });
+        createUser();
         it('responds with json', (done) => {
             server
                 .get(`/api/users/${id}`)
                 .set('Accept', 'application/json')
                 .expect('Content-Type', /json/)
-                .expect(200, () => done());
+                .expect(200)
+                .end((err, res) => {
+                if (err)
+                    return done(err);
+                return done();
+            });
         });
+    });
+    describe('POST /api/users/signup', () => {
+        createUser();
     });
 });
