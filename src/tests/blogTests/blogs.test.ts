@@ -4,8 +4,8 @@ import {
 	initializeMongoServer,
 	deinitializeMongoServer,
 	dropCollections,
-} from '../config/mongoConfigTesting'
-import { fakeBlogData, newBlog } from './fixtures'
+} from '../../config/mongoConfigTesting'
+import { fakeBlogData, newBlog } from '../fixtures'
 import 'dotenv/config'
 
 const server = request.agent('http://localhost:4000')

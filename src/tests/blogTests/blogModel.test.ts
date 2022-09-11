@@ -1,11 +1,11 @@
-import Blog from '../models/blogModel'
-import { fakeBlogData, fakeFailBlogData } from './fixtures'
+import Blog from '../../models/blogModel'
+import { fakeBlogData, fakeFailBlogData } from '../fixtures'
 import 'jest'
 import {
 	initializeMongoServer,
 	deinitializeMongoServer,
 	dropCollections,
-} from '../config/mongoConfigTesting'
+} from '../../config/mongoConfigTesting'
 
 describe('Blog Model', () => {
 	beforeAll(async () => {

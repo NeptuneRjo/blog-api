@@ -1,11 +1,11 @@
-import User from '../models/userModel'
-import { fakeUserData, fakeFailUserData } from './fixtures'
+import User from '../../models/userModel'
+import { fakeUserData, fakeFailUserData } from '../fixtures'
 import 'jest'
 import {
 	initializeMongoServer,
 	deinitializeMongoServer,
 	dropCollections,
-} from '../config/mongoConfigTesting'
+} from '../../config/mongoConfigTesting'
 
 describe('User Model', () => {
 	beforeAll(async () => {
