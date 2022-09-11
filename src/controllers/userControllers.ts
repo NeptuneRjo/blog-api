@@ -62,7 +62,17 @@ export const signup_user = async (
 	const checkIfUser = await User.findOne({ email: req.body.email })
 
 	if (checkIfUser) {
-		return res.status(400).json({ error: 'This email is already registered ' })
+		return res.status(400).json({
+			error: 'This email is already registered ',
+			data: {
+				user: {
+					email: checkIfUser.email,
+					id: checkIfUser._id,
+					role: checkIfUser.role,
+					username: checkIfUser.username,
+				},
+			},
+		})
 	} else {
 		User.create(req.body)
 			.then((user) =>
