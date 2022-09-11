@@ -10,7 +10,7 @@ depending on their role.
 
 ### Before starting the app, you will need to create some `env` variables.
 
-- `MONGO_URI` This is you mongodb connection string
+- `MONGO_URI` This is your mongodb connection string
 - `WEB_SECRET` and `EXPRESS_SECRET` These can be random strings of your choice
 
 - Once the dependencies are installed, simply run `node dist/server.js` or if you have nodemon `nodemon dist/server.js`
